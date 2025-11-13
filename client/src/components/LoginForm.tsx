@@ -24,10 +24,15 @@ export default function LoginForm({ onLogin }: LoginFormProps) {
     <div className="min-h-screen flex items-center justify-center p-6 bg-background">
       <Card className="w-full max-w-md p-8">
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-12 h-12 rounded-lg bg-primary text-primary-foreground mb-4">
-            <Lock className="w-6 h-6" />
-          </div>
-          <h1 className="text-2xl font-semibold mb-2">Know-Craft AI Assistant</h1>
+<div className="inline-flex items-center justify-center w-16 h-16 rounded-lg mb-4">
+  <img 
+    src="/logo-Knowcraft-Analytics.png" 
+    alt="Knowcraft Analytics Logo" 
+    // Adjusted to standard w-12 h-12 to fit the container size
+    className="w-15 h-15 object-cover" 
+  />
+</div>
+          <h1 className="text-2xl font-semibold mb-2">KnowCraft AI Assistant</h1>
           <p className="text-sm text-muted-foreground">
             Secure intelligent query system for fintech
           </p>

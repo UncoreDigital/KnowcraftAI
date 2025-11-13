@@ -11,6 +11,7 @@ import ChatPage from "@/pages/ChatPage";
 import AnalyticsPage from "@/pages/AnalyticsPage";
 import AuditPage from "@/pages/AuditPage";
 import KnowledgeBasePage from "@/pages/KnowledgeBasePage";
+import UserPage from "@/pages/UserPage";
 import SettingsPage from "@/pages/SettingsPage";
 import NotFound from "@/pages/not-found";
 import { useState, useEffect } from "react";
@@ -28,6 +29,7 @@ function Router({ userType }: { userType: "internal" | "client" }) {
           <Route path="/analytics" component={AnalyticsPage} />
           <Route path="/audit" component={AuditPage} />
           <Route path="/knowledge" component={KnowledgeBasePage} />
+          <Route path="/user" component={UserPage} />
         </>
       )}
       <Route component={NotFound} />
@@ -59,6 +61,12 @@ function App() {
     setLocation(`/${page}`);
   };
 
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    setUserName("");
+    setUserType("client");
+  };
+
   const style = {
     "--sidebar-width": "16rem",
     "--sidebar-width-icon": "3rem",
@@ -85,6 +93,7 @@ function App() {
               userName={userName}
               currentPage={currentPage}
               onNavigate={handleNavigate}
+              onLogout={handleLogout}
             />
             <div className="flex flex-col flex-1">
               <header className="flex items-center justify-between p-2 border-b">

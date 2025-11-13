@@ -61,8 +61,30 @@ export default function ChatPage({ userType }: { userType: "internal" | "client"
     },
   ];
 
+  const [messages, setMessages] = useState<Message[]>(mockMessages);
+  const [isLoading, setIsLoading] = useState(false);
+
   const handleSendMessage = (message: string) => {
-    console.log("Sending message:", message);
+    const userMessage: Message = {
+      id: Date.now().toString(),
+      role: "user",
+      content: message,
+      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+    };
+    setMessages(prev => [...prev, userMessage]);
+    setIsLoading(true);
+
+    // Simulate AI response after 1 second
+    setTimeout(() => {
+      const assistantMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        role: "assistant",
+        content: "Thank you for your question. I'm processing your request and will provide a detailed response shortly.",
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      };
+      setMessages(prev => [...prev, assistantMessage]);
+      setIsLoading(false);
+    }, 1000);
   };
 
   return (
@@ -122,7 +144,7 @@ export default function ChatPage({ userType }: { userType: "internal" | "client"
 
         <div className="flex-1 overflow-y-auto p-6">
           <div className="max-w-4xl mx-auto">
-            {mockMessages.map((msg) => (
+            {messages.map((msg) => (
               <ChatMessage
                 key={msg.id}
                 role={msg.role}
@@ -136,6 +158,7 @@ export default function ChatPage({ userType }: { userType: "internal" | "client"
 
         <ChatInput
           onSend={handleSendMessage}
+          isLoading={isLoading}
           showAttachment={userType === "internal"}
         />
       </div>

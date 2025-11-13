@@ -48,13 +48,14 @@ export class MemStorage implements IStorage {
     const id = randomUUID();
     const now = new Date();
     const item: KnowledgeBase = {
-      projectName: insertItem.projectName,
-      clientName: insertItem.clientName,
-      uploadedFileName: insertItem.uploadedFileName,
-      title: insertItem.title || null,
+      name: insertItem.name,
+      type: insertItem.type,
+      source: insertItem.source || null,
       content: insertItem.content || null,
+      status: insertItem.status || "processing",
+      fileSize: insertItem.fileSize || null,
       category: insertItem.category || null,
-      accessLevel: insertItem.accessLevel || null,
+      accessLevel: insertItem.accessLevel || "private",
       id,
       createdAt: now,
       updatedAt: now,

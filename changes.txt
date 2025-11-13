@@ -1,0 +1,30 @@
+in C:\Users\DELL\Desktop\Uncore_all\FintechBrain\client\src\pages\AnalyticsPage.tsx line 25
+
+        <MetricCard
+          label="Avg Response Time"
+          value="1.2s"
+          change="-15% from last month"
+          icon={Clock}
+        />
+        <MetricCard
+          label="Satisfaction Rate"
+          value="94%"
+          change="+3% from last month"
+          icon={TrendingUp}
+        />
+
+
+
+C:\Users\DELL\Desktop\Uncore_all\FintechBrain\client\src\components\AppSidebar.tsx line 47
+
+  <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
+    <img
+      // Source path for the SVG logo
+      src="/Knowcraft-Analytics.png"
+      alt="Knowcraft Analytics Logo"
+      // w-full h-full makes the image fill the w-8 h-8 container.
+      // object-contain ensures the image fits without cropping, preserving aspect ratio.
+      // p-1 adds a slight padding inside the container for better look.
+      className="w-full h-full object-contain p-1"
+    />
+  </div>

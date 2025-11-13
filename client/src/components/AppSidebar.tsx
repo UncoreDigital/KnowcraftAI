@@ -10,18 +10,20 @@ import {
   SidebarHeader,
   SidebarFooter,
 } from "@/components/ui/sidebar";
-import { MessageSquare, History, Database, BarChart3, Settings, Lock } from "lucide-react";
+import { MessageSquare, History, Database, BarChart3, Settings, Lock, User } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 interface AppSidebarProps {
   userType: "internal" | "client";
   userName: string;
   currentPage: string;
   onNavigate: (page: string) => void;
+  onLogout: () => void;
 }
 
-export default function AppSidebar({ userType, userName, currentPage, onNavigate }: AppSidebarProps) {
+export default function AppSidebar({ userType, userName, currentPage, onNavigate, onLogout }: AppSidebarProps) {
   const clientMenu = [
     { title: "Chat", icon: MessageSquare, page: "chat" },
     { title: "History", icon: History, page: "history" },
@@ -30,10 +32,11 @@ export default function AppSidebar({ userType, userName, currentPage, onNavigate
 
   const internalMenu = [
     { title: "Chat", icon: MessageSquare, page: "chat" },
-    { title: "History", icon: History, page: "history" },
+    //{ title: "History", icon: History, page: "history" },
     { title: "Knowledge Base", icon: Database, page: "knowledge" },
     { title: "Analytics", icon: BarChart3, page: "analytics" },
     { title: "Audit Logs", icon: Lock, page: "audit" },
+    { title: "Users", icon: User, page: "user" },
     { title: "Settings", icon: Settings, page: "settings" },
   ];
 
@@ -43,14 +46,14 @@ export default function AppSidebar({ userType, userName, currentPage, onNavigate
     <Sidebar>
       <SidebarHeader className="p-4 border-b">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-primary-foreground font-semibold">
-            NC
-          </div>
-          <div className="flex-1">
-            <h2 className="font-semibold text-sm">Know-Craft AI</h2>
-            <p className="text-xs text-muted-foreground">Intelligent Assistant</p>
-          </div>
-        </div>
+  {/* Image Container: Retains w-8 h-8 size, rounded corners, and primary background color */}
+
+
+  <div className="flex-1">
+    <h2 className="font-semibold text-sm">KnowCraft AI</h2>
+    <p className="text-xs text-muted-foreground">Intelligent Audit Assistant</p>
+  </div>
+</div>
       </SidebarHeader>
 
       <SidebarContent>
@@ -76,19 +79,28 @@ export default function AppSidebar({ userType, userName, currentPage, onNavigate
       </SidebarContent>
 
       <SidebarFooter className="p-4 border-t">
-        <div className="flex items-center gap-3">
-          <Avatar className="w-10 h-10">
-            <AvatarFallback className="bg-muted text-muted-foreground">
-              {userName.substring(0, 2).toUpperCase()}
-            </AvatarFallback>
-          </Avatar>
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium truncate">{userName}</p>
-            <Badge variant={userType === "internal" ? "default" : "secondary"} className="text-xs mt-1">
-              {userType === "internal" ? "INTERNAL TEAM" : "CLIENT"}
-            </Badge>
-          </div>
-        </div>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <div className="flex items-center gap-3 cursor-pointer">
+              <Avatar className="w-10 h-10">
+                <AvatarFallback className="bg-muted text-muted-foreground">
+                  {userName.substring(0, 2).toUpperCase()}
+                </AvatarFallback>
+              </Avatar>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium truncate">{userName}</p>
+                <Badge variant={userType === "internal" ? "default" : "secondary"} className="text-xs mt-1">
+                  {userType === "internal" ? "INTERNAL TEAM" : "CLIENT"}
+                </Badge>
+              </div>
+            </div>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem onClick={onLogout}>
+              Logout
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </SidebarFooter>
     </Sidebar>
   );

@@ -41,13 +41,14 @@ export const auditLogs = pgTable("audit_logs", {
 
 export const knowledgeBase = pgTable("knowledge_base", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  projectName: text("project_name").notNull(),
-  clientName: text("client_name").notNull(),
-  uploadedFileName: text("uploaded_file_name").notNull(),
-  title: text("title"),
-  content: text("content"),
+  name: text("name").notNull(),
+  type: text("type").notNull(), // 'file', 'url', 'text', 'qa'
+  source: text("source"), // file path, URL, or text content
+  content: text("content"), // extracted/processed content
+  status: text("status").default("processing").notNull(), // 'processing', 'ready', 'failed'
+  fileSize: text("file_size"), // for file uploads
   category: text("category"),
-  accessLevel: text("access_level"),
+  accessLevel: text("access_level").default("private"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });

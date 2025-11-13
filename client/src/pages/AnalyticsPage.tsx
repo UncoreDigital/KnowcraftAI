@@ -22,18 +22,7 @@ export default function AnalyticsPage() {
           change="+8% from last month"
           icon={Users}
         />
-        <MetricCard
-          label="Avg Response Time"
-          value="1.2s"
-          change="-15% from last month"
-          icon={Clock}
-        />
-        <MetricCard
-          label="Satisfaction Rate"
-          value="94%"
-          change="+3% from last month"
-          icon={TrendingUp}
-        />
+
       </div>
     </div>
   );
