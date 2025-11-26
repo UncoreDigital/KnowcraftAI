@@ -12,6 +12,29 @@ function log(message: string) {
   console.log(`${time} [api] ${message}`);
 }
 
+// Helper function to get MIME type
+function getMimeType(filepath: string): string {
+  const ext = path.extname(filepath).toLowerCase();
+  const mimeTypes: { [key: string]: string } = {
+    '.html': 'text/html',
+    '.js': 'application/javascript',
+    '.mjs': 'application/javascript',
+    '.css': 'text/css',
+    '.json': 'application/json',
+    '.png': 'image/png',
+    '.jpg': 'image/jpeg',
+    '.jpeg': 'image/jpeg',
+    '.gif': 'image/gif',
+    '.svg': 'image/svg+xml',
+    '.ico': 'image/x-icon',
+    '.woff': 'font/woff',
+    '.woff2': 'font/woff2',
+    '.ttf': 'font/ttf',
+    '.eot': 'application/vnd.ms-fontobject'
+  };
+  return mimeTypes[ext] || 'application/octet-stream';
+}
+
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
     const { method, url } = req;
@@ -56,21 +79,44 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     // Handle static files - serve the React app
     if (method === 'GET') {
-      // Try to serve static files
       const distPath = path.join(process.cwd(), 'dist', 'public');
-      const indexPath = path.join(distPath, 'index.html');
       
+      // Handle specific static asset requests
+      if (url && url !== '/') {
+        const filePath = path.join(distPath, url);
+        
+        try {
+          if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
+            const content = fs.readFileSync(filePath);
+            const mimeType = getMimeType(filePath);
+            res.setHeader('Content-Type', mimeType);
+            
+            // Add cache headers for static assets
+            if (url.includes('/assets/')) {
+              res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+            }
+            
+            return res.send(content);
+          }
+        } catch (error) {
+          console.warn('Error serving static file:', error);
+        }
+      }
+      
+      // Serve index.html for root and SPA routes
+      const indexPath = path.join(distPath, 'index.html');
       try {
         if (fs.existsSync(indexPath)) {
           const html = fs.readFileSync(indexPath, 'utf-8');
           res.setHeader('Content-Type', 'text/html');
+          res.setHeader('Cache-Control', 'no-cache');
           return res.send(html);
         }
       } catch (error) {
-        console.warn('Could not serve static files:', error);
+        console.warn('Could not serve index.html:', error);
       }
       
-      // Fallback to simple message
+      // Fallback to simple message if no static files
       return res.send(`
         <!DOCTYPE html>
         <html>
@@ -86,7 +132,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             <div class="container">
               <h1>🤖 KnowCraftAI</h1>
               <p class="status">✅ API is running successfully!</p>
-              <p>The server is working properly. The React frontend will be available once the build is complete.</p>
+              <p>Building React frontend... Please wait a moment and refresh.</p>
               <p><strong>API Endpoints:</strong></p>
               <ul style="text-align: left; display: inline-block;">
                 <li>GET /api/knowledge-base - List knowledge items</li>
