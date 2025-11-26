@@ -6,7 +6,8 @@ import { Switch } from "@/components/ui/switch";
 
 export default function SettingsPage() {
   return (
-    <div className="p-6 space-y-6">
+    <div className="h-full overflow-auto">
+      <div className="p-6 space-y-6">
       <div>
         <h1 className="text-2xl font-semibold mb-2">Settings</h1>
         <p className="text-muted-foreground">Manage your account and application preferences</p>
@@ -41,6 +42,7 @@ export default function SettingsPage() {
             </div>
           </div>
         </Card>
+      </div>
       </div>
     </div>
   );

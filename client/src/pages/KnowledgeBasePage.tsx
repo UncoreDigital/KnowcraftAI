@@ -184,7 +184,7 @@ export default function KnowledgeBasePage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900" data-testid="page-knowledge-base">
+    <div className="h-full overflow-auto bg-gray-50 dark:bg-gray-900" data-testid="page-knowledge-base">
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Header */}
         <div className="flex justify-between items-center mb-12">

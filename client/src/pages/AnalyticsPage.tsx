@@ -3,7 +3,8 @@ import { MessageSquare, Users, Clock, TrendingUp } from "lucide-react";
 
 export default function AnalyticsPage() {
   return (
-    <div className="p-6 space-y-8" data-testid="page-analytics">
+    <div className="h-full overflow-auto">
+      <div className="p-6 space-y-8" data-testid="page-analytics">
       <div>
         <h1 className="text-2xl font-semibold mb-2">Analytics Dashboard</h1>
         <p className="text-muted-foreground">Monitor AI assistant performance and usage metrics</p>
@@ -23,6 +24,7 @@ export default function AnalyticsPage() {
           icon={Users}
         />
 
+      </div>
       </div>
     </div>
   );
