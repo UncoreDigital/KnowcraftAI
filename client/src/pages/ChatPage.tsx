@@ -63,6 +63,7 @@ export default function ChatPage({ userType }: { userType: "internal" | "client"
 
   const [messages, setMessages] = useState<Message[]>(mockMessages);
   const [isLoading, setIsLoading] = useState(false);
+  const [conversationTitle, setConversationTitle] = useState("Investment Account Features");
 
   const handleSendMessage = (message: string) => {
     const userMessage: Message = {
@@ -87,6 +88,22 @@ export default function ChatPage({ userType }: { userType: "internal" | "client"
     }, 1000);
   };
 
+  const handleConversationClick = (conversationId: string) => {
+    setActiveConversation(conversationId);
+    const conversation = mockConversations.find(c => c.id === conversationId);
+    if (conversation) {
+      setConversationTitle(conversation.title);
+      // Load messages for this conversation (currently using mock data)
+      setMessages(mockMessages);
+    }
+  };
+
+  const handleNewConversation = () => {
+    setActiveConversation("");
+    setConversationTitle("New Conversation");
+    setMessages([]);
+  };
+
   return (
     <div className="flex h-full" data-testid="page-chat">
       {showSidebar && (
@@ -94,7 +111,12 @@ export default function ChatPage({ userType }: { userType: "internal" | "client"
           <div className="p-4 border-b space-y-4">
             <div className="flex items-center justify-between">
               <h2 className="font-semibold">Conversations</h2>
-              <Button size="icon" variant="ghost" data-testid="button-new-conversation">
+              <Button 
+                size="icon" 
+                variant="ghost" 
+                onClick={handleNewConversation}
+                data-testid="button-new-conversation"
+              >
                 <Plus className="w-5 h-5" />
               </Button>
             </div>
@@ -115,7 +137,7 @@ export default function ChatPage({ userType }: { userType: "internal" | "client"
                 key={conv.id}
                 {...conv}
                 isActive={activeConversation === conv.id}
-                onClick={() => setActiveConversation(conv.id)}
+                onClick={() => handleConversationClick(conv.id)}
               />
             ))}
           </div>
@@ -136,7 +158,7 @@ export default function ChatPage({ userType }: { userType: "internal" | "client"
               </Button>
             )}
             <div>
-              <h1 className="font-semibold">Investment Account Features</h1>
+              <h1 className="font-semibold">{conversationTitle}</h1>
               <p className="text-xs text-muted-foreground">Active conversation</p>
             </div>
           </div>
