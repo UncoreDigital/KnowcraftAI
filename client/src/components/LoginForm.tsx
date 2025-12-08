@@ -71,13 +71,13 @@ export default function LoginForm({ onLogin }: LoginFormProps) {
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="client" id="client" data-testid="radio-client" />
                 <Label htmlFor="client" className="font-normal cursor-pointer">
-                  Client Account
+                  Internal Team
                 </Label>
               </div>
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="internal" id="internal" data-testid="radio-internal" />
                 <Label htmlFor="internal" className="font-normal cursor-pointer">
-                  Internal Team
+                  Admin
                 </Label>
               </div>
             </RadioGroup>
