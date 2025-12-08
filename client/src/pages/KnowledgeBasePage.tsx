@@ -310,9 +310,6 @@ export default function KnowledgeBasePage() {
                             Category
                           </th>
                           <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
-                            Access Level
-                          </th>
-                          <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
                             Condition
                           </th>
                           <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
@@ -348,11 +345,6 @@ export default function KnowledgeBasePage() {
                             </td>
                             <td className="px-4 py-4 text-sm text-gray-600 dark:text-gray-400">
                               {item.category || '-'}
-                            </td>
-                            <td className="px-4 py-4 text-sm">
-                              <Badge variant={item.accessLevel === 'public' ? 'default' : 'secondary'} className="capitalize">
-                                {item.accessLevel}
-                              </Badge>
                             </td>
                             <td className="px-4 py-4 text-sm">
                               <Tooltip>
@@ -524,24 +516,6 @@ export default function KnowledgeBasePage() {
                   onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
                   placeholder="e.g., Documentation, FAQ, etc."
                 />
-              </div>
-
-              <div>
-                <Label htmlFor="accessLevel">Access Level</Label>
-                <Select
-                  value={formData.accessLevel}
-                  onValueChange={(value: "private" | "public") =>
-                    setFormData(prev => ({ ...prev, accessLevel: value }))
-                  }
-                >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="private">Private</SelectItem>
-                    <SelectItem value="public">Public</SelectItem>
-                  </SelectContent>
-                </Select>
               </div>
 
               <Button type="submit" className="w-full">
