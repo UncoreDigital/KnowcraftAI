@@ -26,7 +26,7 @@ interface AppSidebarProps {
 export default function AppSidebar({ userType, userName, currentPage, onNavigate, onLogout }: AppSidebarProps) {
   const clientMenu = [
     { title: "Chat", icon: MessageSquare, page: "chat" },
-    { title: "History", icon: History, page: "history" },
+    //{ title: "History", icon: History, page: "history" },
     { title: "Settings", icon: Settings, page: "settings" },
   ];
 
