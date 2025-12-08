@@ -46,22 +46,64 @@ export default function ChatPage({ userType }: { userType: "internal" | "client"
     },
   ];
 
-  const mockMessages: Message[] = [
-    {
-      id: "1",
-      role: "user",
-      content: "What are the key features of our premium investment account?",
-      timestamp: "2:34 PM",
-    },
-    {
-      id: "2",
-      role: "assistant",
-      content: "Our premium investment account offers diversified portfolio management, low-fee index funds, automated rebalancing, and dedicated financial advisor access. You'll also get priority customer support and exclusive market insights.",
-      timestamp: "2:34 PM",
-    },
-  ];
+  const conversationMessages: Record<string, Message[]> = {
+    "1": [
+      {
+        id: "1",
+        role: "user",
+        content: "What are the key features of our premium investment account?",
+        timestamp: "2:34 PM",
+      },
+      {
+        id: "2",
+        role: "assistant",
+        content: "Our premium investment account offers diversified portfolio management, low-fee index funds, automated rebalancing, and dedicated financial advisor access. You'll also get priority customer support and exclusive market insights.",
+        timestamp: "2:34 PM",
+      },
+    ],
+    "2": [
+      {
+        id: "1",
+        role: "user",
+        content: "Can you explain the fee structure for internal compliance reviews?",
+        timestamp: "Yesterday",
+      },
+      {
+        id: "2",
+        role: "assistant",
+        content: "Internal compliance reviews are conducted quarterly at $2,500 per review. This includes documentation audit, process verification, regulatory alignment check, and detailed compliance report. Additional ad-hoc reviews are $1,200 each.",
+        timestamp: "Yesterday",
+      },
+    ],
+    "3": [
+      {
+        id: "1",
+        role: "user",
+        content: "Provide a comprehensive market analysis for Q4 2024",
+        timestamp: "3 days ago",
+      },
+      {
+        id: "2",
+        role: "assistant",
+        content: "Q4 2024 market analysis shows strong performance in tech sector (+12%), moderate growth in healthcare (+6%), and volatility in energy markets (-3%). Key indicators suggest continued inflation control and stable interest rates through year-end.",
+        timestamp: "3 days ago",
+      },
+      {
+        id: "3",
+        role: "user",
+        content: "What are the key risk factors to watch?",
+        timestamp: "3 days ago",
+      },
+      {
+        id: "4",
+        role: "assistant",
+        content: "Key risks include geopolitical tensions affecting energy prices, potential supply chain disruptions in Q1 2025, and Federal Reserve policy changes. Monitor cryptocurrency volatility and emerging market currency fluctuations as secondary indicators.",
+        timestamp: "3 days ago",
+      },
+    ],
+  };
 
-  const [messages, setMessages] = useState<Message[]>(mockMessages);
+  const [messages, setMessages] = useState<Message[]>(conversationMessages["1"]);
   const [isLoading, setIsLoading] = useState(false);
   const [conversationTitle, setConversationTitle] = useState("Investment Account Features");
 
@@ -93,8 +135,8 @@ export default function ChatPage({ userType }: { userType: "internal" | "client"
     const conversation = mockConversations.find(c => c.id === conversationId);
     if (conversation) {
       setConversationTitle(conversation.title);
-      // Load messages for this conversation (currently using mock data)
-      setMessages(mockMessages);
+      // Load messages for this specific conversation
+      setMessages(conversationMessages[conversationId] || []);
     }
   };
 
