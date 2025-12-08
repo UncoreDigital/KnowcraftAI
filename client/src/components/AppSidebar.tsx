@@ -90,7 +90,7 @@ export default function AppSidebar({ userType, userName, currentPage, onNavigate
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium truncate">{userName}</p>
                 <Badge variant={userType === "internal" ? "default" : "secondary"} className="text-xs mt-1">
-                  {userType === "internal" ? "INTERNAL TEAM" : "CLIENT"}
+                  {userType === "internal" ? "Admin" : "INTERNAL TEAM"}
                 </Badge>
               </div>
             </div>
