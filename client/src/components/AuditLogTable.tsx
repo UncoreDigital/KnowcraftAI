@@ -60,7 +60,7 @@ export default function AuditLogTable({ logs, onViewDetails }: AuditLogTableProp
                   variant={log.role === "internal" ? "default" : "secondary"}
                   className="text-xs uppercase"
                 >
-                  {log.role}
+                  {log.role === "internal" ? "ADMIN" : log.role === "client" ? "INTERNAL" : log.role}
                 </Badge>
               </td>
               <td className="p-4">
