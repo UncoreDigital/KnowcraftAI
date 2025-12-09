@@ -1,14 +1,11 @@
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Eye } from "lucide-react";
 
 interface AuditLogEntry {
   id: string;
   timestamp: string;
   user: string;
   role: string;
-  queryPreview: string;
-  responsePreview: string;
+  numberOfQueries: number;
 }
 
 interface AuditLogTableProps {
@@ -32,13 +29,7 @@ export default function AuditLogTable({ logs, onViewDetails }: AuditLogTableProp
               Role
             </th>
             <th className="text-left p-4 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              Query Preview
-            </th>
-            <th className="text-left p-4 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              Response Preview
-            </th>
-            <th className="text-left p-4 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              Actions
+              Number of Queries
             </th>
           </tr>
         </thead>
@@ -60,26 +51,11 @@ export default function AuditLogTable({ logs, onViewDetails }: AuditLogTableProp
                   variant={log.role === "internal" ? "default" : "secondary"}
                   className="text-xs uppercase"
                 >
-                  {log.role}
+                  {log.role === "internal" ? "INTERNAL TEAM" : "CLIENT"}
                 </Badge>
               </td>
               <td className="p-4">
-                <p className="text-sm line-clamp-2 max-w-xs">{log.queryPreview}</p>
-              </td>
-              <td className="p-4">
-                <p className="text-sm text-muted-foreground line-clamp-2 max-w-xs">
-                  {log.responsePreview}
-                </p>
-              </td>
-              <td className="p-4">
-                <Button
-                  size="icon"
-                  variant="ghost"
-                  onClick={() => onViewDetails(log.id)}
-                  data-testid={`button-view-${log.id}`}
-                >
-                  <Eye className="w-4 h-4" />
-                </Button>
+                <p className="text-sm font-semibold">{log.numberOfQueries}</p>
               </td>
             </tr>
           ))}

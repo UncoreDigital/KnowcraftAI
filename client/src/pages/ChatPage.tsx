@@ -22,7 +22,7 @@ interface Conversation {
 
 export default function ChatPage({ userType }: { userType: "internal" | "client" }) {
   const [showSidebar, setShowSidebar] = useState(true);
-  const [activeConversation, setActiveConversation] = useState("1");
+  const [activeConversation, setActiveConversation] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
 
   const mockConversations: Conversation[] = [
@@ -46,23 +46,66 @@ export default function ChatPage({ userType }: { userType: "internal" | "client"
     },
   ];
 
-  const mockMessages: Message[] = [
-    {
-      id: "1",
-      role: "user",
-      content: "What are the key features of our premium investment account?",
-      timestamp: "2:34 PM",
-    },
-    {
-      id: "2",
-      role: "assistant",
-      content: "Our premium investment account offers diversified portfolio management, low-fee index funds, automated rebalancing, and dedicated financial advisor access. You'll also get priority customer support and exclusive market insights.",
-      timestamp: "2:34 PM",
-    },
-  ];
+  const conversationMessages: Record<string, Message[]> = {
+    "1": [
+      {
+        id: "1",
+        role: "user",
+        content: "What are the key features of our premium investment account?",
+        timestamp: "2:34 PM",
+      },
+      {
+        id: "2",
+        role: "assistant",
+        content: "Our premium investment account offers diversified portfolio management, low-fee index funds, automated rebalancing, and dedicated financial advisor access. You'll also get priority customer support and exclusive market insights.",
+        timestamp: "2:34 PM",
+      },
+    ],
+    "2": [
+      {
+        id: "1",
+        role: "user",
+        content: "Can you explain the fee structure for internal compliance reviews?",
+        timestamp: "Yesterday",
+      },
+      {
+        id: "2",
+        role: "assistant",
+        content: "Internal compliance reviews are conducted quarterly at $2,500 per review. This includes documentation audit, process verification, regulatory alignment check, and detailed compliance report. Additional ad-hoc reviews are $1,200 each.",
+        timestamp: "Yesterday",
+      },
+    ],
+    "3": [
+      {
+        id: "1",
+        role: "user",
+        content: "Provide a comprehensive market analysis for Q4 2024",
+        timestamp: "3 days ago",
+      },
+      {
+        id: "2",
+        role: "assistant",
+        content: "Q4 2024 market analysis shows strong performance in tech sector (+12%), moderate growth in healthcare (+6%), and volatility in energy markets (-3%). Key indicators suggest continued inflation control and stable interest rates through year-end.",
+        timestamp: "3 days ago",
+      },
+      {
+        id: "3",
+        role: "user",
+        content: "What are the key risk factors to watch?",
+        timestamp: "3 days ago",
+      },
+      {
+        id: "4",
+        role: "assistant",
+        content: "Key risks include geopolitical tensions affecting energy prices, potential supply chain disruptions in Q1 2025, and Federal Reserve policy changes. Monitor cryptocurrency volatility and emerging market currency fluctuations as secondary indicators.",
+        timestamp: "3 days ago",
+      },
+    ],
+  };
 
-  const [messages, setMessages] = useState<Message[]>(mockMessages);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [conversationTitle, setConversationTitle] = useState("New Conversation");
 
   const handleSendMessage = (message: string) => {
     const userMessage: Message = {
@@ -87,14 +130,44 @@ export default function ChatPage({ userType }: { userType: "internal" | "client"
     }, 1000);
   };
 
+  const handleConversationClick = (conversationId: string) => {
+    setActiveConversation(conversationId);
+    const conversation = mockConversations.find(c => c.id === conversationId);
+    if (conversation) {
+      setConversationTitle(conversation.title);
+      // Load messages for this specific conversation
+      setMessages(conversationMessages[conversationId] || []);
+    }
+  };
+
+  const handleNewConversation = () => {
+    setActiveConversation("");
+    setConversationTitle("New Conversation");
+    setMessages([]);
+  };
+
+  // Filter conversations based on search query
+  const filteredConversations = mockConversations.filter((conv) => {
+    const query = searchQuery.toLowerCase();
+    return (
+      conv.title.toLowerCase().includes(query) ||
+      conv.preview.toLowerCase().includes(query)
+    );
+  });
+
   return (
     <div className="flex h-full" data-testid="page-chat">
       {showSidebar && (
-        <div className="w-80 border-r flex flex-col bg-card">
+        <div className="w-56 border-r flex flex-col bg-card">
           <div className="p-4 border-b space-y-4">
             <div className="flex items-center justify-between">
               <h2 className="font-semibold">Conversations</h2>
-              <Button size="icon" variant="ghost" data-testid="button-new-conversation">
+              <Button 
+                size="icon" 
+                variant="ghost" 
+                onClick={handleNewConversation}
+                data-testid="button-new-conversation"
+              >
                 <Plus className="w-5 h-5" />
               </Button>
             </div>
@@ -110,14 +183,20 @@ export default function ChatPage({ userType }: { userType: "internal" | "client"
             </div>
           </div>
           <div className="flex-1 overflow-y-auto">
-            {mockConversations.map((conv) => (
-              <ConversationItem
-                key={conv.id}
-                {...conv}
-                isActive={activeConversation === conv.id}
-                onClick={() => setActiveConversation(conv.id)}
-              />
-            ))}
+            {filteredConversations.length > 0 ? (
+              filteredConversations.map((conv) => (
+                <ConversationItem
+                  key={conv.id}
+                  {...conv}
+                  isActive={activeConversation === conv.id}
+                  onClick={() => handleConversationClick(conv.id)}
+                />
+              ))
+            ) : (
+              <div className="p-4 text-center text-sm text-muted-foreground">
+                No conversations found
+              </div>
+            )}
           </div>
         </div>
       )}
@@ -136,7 +215,7 @@ export default function ChatPage({ userType }: { userType: "internal" | "client"
               </Button>
             )}
             <div>
-              <h1 className="font-semibold">Investment Account Features</h1>
+              <h1 className="font-semibold">{conversationTitle}</h1>
               <p className="text-xs text-muted-foreground">Active conversation</p>
             </div>
           </div>

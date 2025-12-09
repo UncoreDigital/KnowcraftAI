@@ -22,7 +22,7 @@ function Router({ userType }: { userType: "internal" | "client" }) {
     <Switch>
       <Route path="/" component={() => <ChatPage userType={userType} />} />
       <Route path="/chat" component={() => <ChatPage userType={userType} />} />
-      <Route path="/history" component={() => <ChatPage userType={userType} />} />
+      
       <Route path="/settings" component={SettingsPage} />
       {userType === "internal" && (
         <>
@@ -42,11 +42,19 @@ function App() {
   const [userType, setUserType] = useState<"internal" | "client">("client");
   const [userName, setUserName] = useState("");
   const [currentPage, setCurrentPage] = useState("chat");
+  const [sidebarOpen, setSidebarOpen] = useState(true);
   const [location, setLocation] = useLocation();
 
   useEffect(() => {
     const path = location.replace('/', '') || 'chat';
     setCurrentPage(path);
+    
+    // Auto-collapse sidebar on chat page, expand on other pages
+    if (path === 'chat' || path === '') {
+      setSidebarOpen(false);
+    } else {
+      setSidebarOpen(true);
+    }
   }, [location]);
 
   const handleLogin = (username: string, password: string, type: "internal" | "client") => {
@@ -69,7 +77,7 @@ function App() {
 
   const style = {
     "--sidebar-width": "16rem",
-    "--sidebar-width-icon": "3rem",
+    "--sidebar-width-icon": "4.5rem",
   };
 
   if (!isAuthenticated) {
@@ -86,7 +94,11 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <SidebarProvider style={style as React.CSSProperties}>
+        <SidebarProvider 
+          style={style as React.CSSProperties}
+          open={sidebarOpen}
+          onOpenChange={setSidebarOpen}
+        >
           <div className="flex h-screen w-full">
             <AppSidebar
               userType={userType}
